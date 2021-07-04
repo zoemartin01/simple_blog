@@ -1,31 +1,45 @@
 from pyramid.view import view_config
 from pyramid.response import Response
-from sqlalchemy.exc import SQLAlchemyError
+from pyramid.httpexceptions import (
+    HTTPSeeOther,
+    HTTPNotFound
+)
 
 from .. import models
 
 
-@view_config(route_name='home', renderer='simple_blog:templates/mytemplate.mako')
-def my_view(request):
-    try:
-        query = request.dbsession.query(models.MyModel)
-        one = query.filter(models.MyModel.name == 'one').one()
-    except SQLAlchemyError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'Simple Blog'}
+@view_config(route_name='frontpage', renderer='simple_blog:templates/frontpage.mako')
+def frontpage(request):
+    posts = request.dbsession.query(models.Post).limit(5).all()
+    return dict(posts=posts)
 
 
-db_err_msg = """\
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
+@view_config(route_name='all_posts', renderer='simple_blog:templates/posts/view_all.mako')
+def view_all_posts(request):
+    posts = request.dbsession.query(models.Post).all()
+    return dict(posts=posts)
 
-1.  You may need to initialize your database tables with `alembic`.
-    Check your README.txt for descriptions and try to run it.
 
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
+@view_config(route_name='view_post', renderer='simple_blog:templates/posts/view.mako')
+def view_post(request):
+    id = request.matchdict['id']
+    post = request.dbsession.query(models.Post).get(id)
+    if post is None:
+        raise HTTPNotFound('No such post')
 
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
+    return dict(post=post)
+
+
+@view_config(route_name='new_post', renderer='simple_blog:templates/posts/new_post.mako')
+def new_post(request):
+    # if request.method == 'POST':
+        # TODO
+    return dict()
+
+
+@view_config(route_name='edit_post', renderer='simple_blog:templates/posts/edit_post.mako')
+def edit_post(request):
+    # if request.method == 'POST':
+        # TODO
+    return dict()
+
