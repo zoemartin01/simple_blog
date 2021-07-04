@@ -12,6 +12,16 @@ def setup_models(dbsession):
     Add or update models / fixtures in the database.
 
     """
+    editor = models.User(email='editor@foo.com', username='editor')
+    editor.set_password("editor")
+    dbsession.add(editor)
+
+    post = models.Post(
+        title='First Post',
+        data='*foo* **bar**!',
+        creator=editor
+    )
+    dbsession.add(post)
 
 
 def parse_args(argv):
