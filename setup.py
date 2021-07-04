@@ -20,7 +20,8 @@ requires = [
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
-    'bcrypt'
+    'bcrypt',
+    'markdown2'
 ]
 
 tests_require = [
