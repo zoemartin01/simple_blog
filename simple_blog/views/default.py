@@ -4,6 +4,7 @@ from pyramid.httpexceptions import (
     HTTPSeeOther,
     HTTPNotFound
 )
+import markdown2
 
 from .. import models
 
@@ -22,12 +23,13 @@ def view_all_posts(request):
 
 @view_config(route_name='view_post', renderer='simple_blog:templates/posts/view.mako')
 def view_post(request):
-    id = request.matchdict['id']
-    post = request.dbsession.query(models.Post).get(id)
+    post_id = request.matchdict['id']
+    post = request.dbsession.query(models.Post).get(post_id)
     if post is None:
         raise HTTPNotFound('No such post')
+    render = markdown2.markdown(post.data)
 
-    return dict(post=post)
+    return dict(post=post, render=render)
 
 
 @view_config(route_name='new_post', renderer='simple_blog:templates/posts/new_post.mako')
