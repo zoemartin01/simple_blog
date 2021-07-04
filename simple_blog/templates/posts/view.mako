@@ -1,3 +1,3 @@
-<%inherit file="layout.mako"/>
+<%inherit file="../layout.mako"/>
 
 a post will appear here
