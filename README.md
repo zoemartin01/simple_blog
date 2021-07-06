@@ -23,7 +23,8 @@ http://localhost
 ### or the not-as-easy way:
 
 You'll need these programs:
-- python3.9
+- python3
+- pip3
 - sqlite3
 
 ```
