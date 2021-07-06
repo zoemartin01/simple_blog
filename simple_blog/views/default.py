@@ -1,17 +1,12 @@
-from pyramid.view import view_config
-from pyramid.response import Response
-from pyramid.httpexceptions import (
-    HTTPSeeOther,
-    HTTPNotFound
-)
-import markdown2
+from pyramid.view import view_config, forbidden_view_config
+from pyramid.httpexceptions import HTTPSeeOther
 
 from .. import models
 
 
 @view_config(route_name='frontpage', renderer='simple_blog:templates/frontpage.mako')
 def frontpage(request):
-    posts = request.dbsession.query(models.Post).limit(5).all()
+    posts = request.dbsession.query(models.Post).order_by(models.Post.id.desc()).limit(6).all()
     return dict(posts=posts)
 
 
@@ -21,27 +16,11 @@ def view_all_posts(request):
     return dict(posts=posts)
 
 
-@view_config(route_name='view_post', renderer='simple_blog:templates/posts/view.mako')
-def view_post(request):
-    post_id = request.matchdict['id']
-    post = request.dbsession.query(models.Post).get(post_id)
-    if post is None:
-        raise HTTPNotFound('No such post')
-    render = markdown2.markdown(post.data)
+@forbidden_view_config(renderer='tutorial:templates/403.mako')
+def forbidden_view(exc, request):
+    if not request.is_authenticated:
+        next_url = request.route_url('login', _query={'next': request.url})
+        return HTTPSeeOther(location=next_url)
 
-    return dict(post=post, render=render)
-
-
-@view_config(route_name='new_post', renderer='simple_blog:templates/posts/new_post.mako')
-def new_post(request):
-    # if request.method == 'POST':
-        # TODO
-    return dict()
-
-
-@view_config(route_name='edit_post', renderer='simple_blog:templates/posts/edit_post.mako')
-def edit_post(request):
-    # if request.method == 'POST':
-        # TODO
-    return dict()
-
+    request.response.status = 403
+    return {}
