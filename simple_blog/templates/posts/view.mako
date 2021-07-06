@@ -11,6 +11,4 @@
 <a href="${ request.route_url('edit_post', id=post.id)}">Edit</a>
 % endif
 
-<div class="row">
-    ${render | n}
-</div>
+${render | n}
