@@ -1,11 +1,10 @@
-from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPFound
-)
-from pyramid.security import remember, forget
-from sqlalchemy import or_
-from ..models import User, ActivationToken
 import uuid
+
+from pyramid.httpexceptions import HTTPFound
+from pyramid.view import view_config
+from sqlalchemy import or_
+
+from ..models import User, ActivationToken
 
 
 @view_config(route_name='register', renderer='simple_blog:templates/users/register.mako')
