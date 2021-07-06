@@ -1,4 +1,5 @@
 from pyramid.config import Configurator
+from pyramid.session import SignedCookieSessionFactory
 
 
 def main(global_config, **settings):
@@ -10,4 +11,7 @@ def main(global_config, **settings):
         config.include('.routes')
         config.include('.models')
         config.scan()
+
+        session_factory = SignedCookieSessionFactory('secret')
+        config.set_session_factory(session_factory)
     return config.make_wsgi_app()
