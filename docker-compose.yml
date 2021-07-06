@@ -4,6 +4,6 @@ services:
   webserver:
     image: blog-webserver
     build: .
-    command: bash -c "alembic -c production.ini revision --autogenerate -m "init" && alembic -c production.ini upgrade head && initialize_simple_blog_db production.ini && pserve production.ini"
+    command: ./prod.sh
     ports:
       - 80:6543
