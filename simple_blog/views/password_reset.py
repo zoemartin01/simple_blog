@@ -7,7 +7,7 @@ import uuid
 from ..models import User, PasswordResetToken
 
 
-@view_config(route_name='password_forgotten', renderer='simple_blog:templates/users/password_forgotten.mako')
+@view_config(route_name='password_forgotten', renderer='simple_blog:templates/users/password_forgotten.mako', permission='view')
 def password_forgotten(request):
     email = ''
     if request.method == 'POST':
@@ -25,7 +25,7 @@ def password_forgotten(request):
     )
 
 
-@view_config(route_name='password_reset', renderer='simple_blog:templates/users/password_reset.mako')
+@view_config(route_name='password_reset', renderer='simple_blog:templates/users/password_reset.mako', permission='view')
 def password_reset(request):
     next_url = request.route_url('frontpage')
     if request.method == 'POST':

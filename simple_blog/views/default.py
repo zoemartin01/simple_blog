@@ -4,13 +4,13 @@ from pyramid.httpexceptions import HTTPSeeOther
 from .. import models
 
 
-@view_config(route_name='frontpage', renderer='simple_blog:templates/frontpage.mako')
+@view_config(route_name='frontpage', renderer='simple_blog:templates/frontpage.mako', permission='view')
 def frontpage(request):
     posts = request.dbsession.query(models.Post).order_by(models.Post.id.desc()).limit(6).all()
     return dict(posts=posts)
 
 
-@view_config(route_name='all_posts', renderer='simple_blog:templates/posts/view_all.mako')
+@view_config(route_name='all_posts', renderer='simple_blog:templates/posts/view_all.mako', permission='view')
 def view_all_posts(request):
     posts = request.dbsession.query(models.Post).all()
     return dict(posts=posts)

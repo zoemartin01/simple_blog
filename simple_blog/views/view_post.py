@@ -1,13 +1,13 @@
-from pyramid.view import view_config
+import markdown2
 from pyramid.httpexceptions import (
     HTTPNotFound
 )
-import uuid
-import markdown2
+from pyramid.view import view_config
+
 from ..models import Post
 
 
-@view_config(route_name='view_post', renderer='simple_blog:templates/posts/view.mako')
+@view_config(route_name='view_post', renderer='simple_blog:templates/posts/view.mako', permission='view')
 def view_post(request):
     post_id = request.matchdict['id']
     post = request.dbsession.query(Post).get(post_id)

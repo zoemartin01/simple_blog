@@ -2,12 +2,11 @@ import uuid
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
-from sqlalchemy import or_
 
 from ..models import User, ActivationToken
 
 
-@view_config(route_name='register', renderer='simple_blog:templates/users/register.mako')
+@view_config(route_name='register', renderer='simple_blog:templates/users/register.mako', permission='view')
 def register(request):
     next_url = request.params.get('next', request.referrer)
     if not next_url or next_url == request.route_url('login'):

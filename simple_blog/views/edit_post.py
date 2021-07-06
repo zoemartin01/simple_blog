@@ -1,20 +1,20 @@
-from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPForbidden
 )
-import uuid
+from pyramid.view import view_config
+
 from ..models import Post
 
 
-@view_config(route_name='edit_post', renderer='simple_blog:templates/posts/edit_post.mako')
+@view_config(route_name='edit_post', renderer='simple_blog:templates/posts/edit_post.mako', permission='edit')
 def edit_post(request):
     post_id = request.matchdict['id']
     post = request.dbsession.query(Post).get(post_id)
+    user = request.identity
+    if user is None or post.creator != user:
+        raise HTTPForbidden
     if request.method == 'POST':
-        user = request.identity
-        if user is None or post.creator != user:
-            raise HTTPForbidden
         post.title = request.params['title']
         post.data = request.params['data']
         next_url = request.route_url('view_post', id=post_id)

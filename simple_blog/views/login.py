@@ -1,15 +1,15 @@
-from pyramid.view import view_config
+from pyramid.csrf import new_csrf_token
 from pyramid.httpexceptions import (
     HTTPFound,
-    HTTPForbidden,
     HTTPSeeOther
 )
 from pyramid.security import remember
-from pyramid.csrf import new_csrf_token
+from pyramid.view import view_config
+
 from ..models import User
 
 
-@view_config(route_name='login', renderer='simple_blog:templates/users/login.mako')
+@view_config(route_name='login', renderer='simple_blog:templates/users/login.mako', permission='view')
 def login(request):
     if request.identity:
         return HTTPSeeOther(location=request.route_url('frontpage'))

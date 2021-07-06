@@ -6,7 +6,7 @@ from pyramid.httpexceptions import (
 from ..models import ActivationToken
 
 
-@view_config(route_name='activate')
+@view_config(route_name='activate', permission='view')
 def activate(request):
     token = request.matchdict['token']
     activation_token = request.dbsession.query(ActivationToken).filter_by(token=token).first()
