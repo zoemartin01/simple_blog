@@ -1,6 +1,5 @@
 from pyramid.httpexceptions import (
-    HTTPFound,
-    HTTPForbidden
+    HTTPFound
 )
 from pyramid.view import view_config
 
@@ -11,9 +10,6 @@ from ..models import Post
 def edit_post(request):
     post_id = request.matchdict['id']
     post = request.dbsession.query(Post).get(post_id)
-    user = request.identity
-    if user is None or post.creator != user:
-        raise HTTPForbidden
     if request.method == 'POST':
         post.title = request.params['title']
         post.data = request.params['data']
