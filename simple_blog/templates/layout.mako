@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-expand-lg navbar-light m-3" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="#">Simple Blog</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,19 +42,42 @@
                 <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/posts">Posts</a>
+                <a class="nav-link" href="${ request.route_url('all_posts')}">Posts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/users">Users</a>
+                <a class="nav-link" href="${ request.route_url('new_post')}">New Post</a>
             </li>
         </ul>
         <span class="navbar-text">
-      User
-    </span>
+            % if not request.is_authenticated:
+                <p class="pull-right">
+              <a href="${ request.route_url('login') }">Login</a>
+            </p>
+            % else:
+                <form class="pull-right" action="${ request.route_url('logout') }" method="post">
+              ${request.identity.username}
+                    <input type="hidden" name="csrf_token" value="${ get_csrf_token() }">
+              <button class="btn btn-link" type="submit">Logout</button>
+            </form>
+            % endif
+        </span>
     </div>
 </nav>
 
 <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            % if request.session.peek_flash():
+                <% flash = request.session.pop_flash() %>
+                % for msg in flash:
+                    <div class="col-md-12 alert alert-info" role="alert">
+                        ${ msg }
+                    </div>
+                %endfor
+            % endif
+        </div>
+    </div>
+
     <div class="col-auto">
         ${ next.body() }
     </div>
