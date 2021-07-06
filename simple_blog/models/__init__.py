@@ -7,6 +7,8 @@ import zope.sqlalchemy
 # ``Base.metadata`` prior to any initialization routines.
 from .user import User #flake8: noqa
 from .post import Post #flake8: noqa
+from .activation_token import ActivationToken #flake8: noqa
+from .pw_reset_token import PasswordResetToken #flake8: noqa
 
 # Run ``configure_mappers`` after defining all of the models to ensure
 # all relationships can be setup.
