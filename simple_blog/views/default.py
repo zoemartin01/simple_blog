@@ -16,7 +16,7 @@ def view_all_posts(request):
     return dict(posts=posts)
 
 
-@forbidden_view_config(renderer='tutorial:templates/403.mako')
+@forbidden_view_config(renderer='simple_blog:templates/403.mako')
 def forbidden_view(exc, request):
     if not request.is_authenticated:
         next_url = request.route_url('login', _query={'next': request.url})
