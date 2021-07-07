@@ -30,7 +30,7 @@ def login(request):
             request.session.flash('User does not exist!')
         elif not user.active:
             request.session.flash('Account not activated!')
-        elif user.check_password(password):
+        elif not user.check_password(password):
             request.session.flash('Password incorrect!')
         request.response.status = 400
 
