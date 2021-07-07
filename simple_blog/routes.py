@@ -50,6 +50,7 @@ def includeme(config):
     config.add_route('new_post', '/posts/new', factory=AuthRequired)
     config.add_route('view_post', '/posts/{id}', factory=post_factory)
     config.add_route('edit_post', '/posts/{id}/edit', factory=post_factory)
+    config.add_route('delete_post', '/posts/{id}/delete', factory=post_factory)
 
     config.add_route('login', '/login', factory=Public)
     config.add_route('register', '/register', factory=Public)
