@@ -1,3 +1,5 @@
+import html
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 
@@ -9,7 +11,7 @@ def new_post(request):
     if request.method == 'POST':
         user = request.identity
         title = request.params['title']
-        data = request.params['data']
+        data = html.escape(request.params['data'])
         post = Post(
             title=title,
             data=data,
